@@ -63,8 +63,62 @@
 
     // Complete the GLSL program
 
-    void main() {
 
+      attribute vec3 vertex;
+uniform vec4 props;
+uniform vec3 translate;
+uniform mat4 VP;
+
+mat4 T(vec3 t){
+  return mat4(
+    1.0,0.0,0.0,0.0,
+    0.0,1.0,0.0,0.0,
+    0.0,0.0,1.0,0.0,
+    t.x,t.y,t.z,1.0
+  );
+}
+mat4 S(float s){
+  return mat4(
+    s,0.0,0.0,0.0,
+    0.0,s,0.0,0.0,
+    0.0,0.0,s,0.0,
+    0.0,0.0,0.0,1.0
+  );
+}
+mat4 Rx(float a){
+  float c=cos(a); float s=sin(a);
+  return mat4(
+    1.0,0.0,0.0,0.0,
+    0.0,c_x,s_x,0.0,
+    0.0,-s_x,c_x,0.0,
+    0.0,0.0,0.0,1.0
+  );
+}
+mat4 Ry(float a){
+  float c=cos(a); float s=sin(a);
+  return mat4(
+    c_y,0.0,-s_y,0.0,
+    0.0,1.0,0.0,0.0,
+    s_y,0.0,c_y,0.0,
+    0.0,0.0,0.0,1.0
+  );
+}
+mat4 Rz(float a){
+  float c=cos(a); float s=sin(a);
+  return mat4(
+    c_z,s_z,0.0,0.0,
+    -s_z,c_z,0.0,0.0,
+    0.0,0.0,1.0,0.0,
+    0.0,0.0,0.0,1.0
+  );
+}
+void main(){
+  float xang=props.x;
+  float yang=props.y;
+  float zang=props.z;
+  float scale=props.w;
+  mat4 M=T(translate)*S(scale)*Rx(xang)*Ry(yang)*Rz(zang);
+  gl_Position=VP*M*vec4(vertex,1.0);
 
 
     }
